@@ -1,76 +1,55 @@
 #Jogo sendo desenvolvido por Cícero Igor Alves Torquato dos Santos
 import pygame
+import random
+
+#Estruturado:
+class Player(pygame.sprite.Sprite):
+    #1-Preparar um objeto (imagem) inserir numa area retangular e posicionar na tela.
+    def __init__(self, imagem): #Método construtor
+        self.imagem = imagem #Vamos passar a imagem posteriormente
+        self.rect = self.imagem.get_rect()  #Captura a area retangular para ser usada
+        self.rect.top, self.rect.left = (100, 200)  #posições do retângulo 100 do topo 200 a esquerda
+
+    def mover(self, vx, vy):  #Objeto principal self + referências
+        self.rect.move_ip(vx, vy)
+    #3- Atualizar um objeto (superficie)
+    def update(self, superficie):
+        superficie.blit(self.imagem, self.rect)
 
 def main():
-    #As definições dos objetos (variáveis):
+    import pygame
+    #main usa a classe player por isso não pode estar dentro dessa classe.
+    #Declaração das váriaveis (objetos)
     pygame.init()
-    tela = pygame.display.set_mode([300,300])
-    pygame.display.set_caption(("Iniciando Pygame"))
-    relogio = pygame.time.Clock()
-
-    cor_branca = (255,255,255)
-    cor_azul = (108,194,236)
-    cor_verde = (152,231,114)
-    cor_vermelha = (227,57,9)
-
-    sup = pygame.Surface((200,200))
-    sup.fill((cor_azul))
-
-    sup2 = pygame.Surface((100, 100))
-    sup2.fill((cor_verde))
-
-    ret = pygame.Rect(10,10,45,45)
-
+    tela = pygame.display.set_mode((480, 300))
     sair = False
+    relogio = pygame.time.Clock() #Velocidade da tela , em quantos quadros ela é renderizada.
 
+    img_nave = pygame.image.load("imagens/nave.png").convert_alpha() #Imagem deve ser png, sem fundo branco, para não bugar colisão. Converte para ter uma certa transparência suave de fundo.
+    jogador = Player(img_nave) #Classe Player criada , dar referência que a imagem da nave será o jogador em si . Quando criar a area retangular vai colocar nela a imagem e essa imagem é o player.
+
+    
     while sair != True:
-        #Receber com o get o evento para sair e trocar a variável sair para True.
+        
         for event in pygame.event.get():
-            if event.type == pygame.QUIT:
+            if event.type == pygame.QUIT:  #Se o usuário clicar no X ele quita do game.
                 sair = True
+        
 
-            #if event.type == pygame.MOUSEBUTTONDOWN:
-                #ret = ret.move(10,10)
+        relogio.tick(20)  #Atualização 20 frames por segundo.
+        #tela.blit(imagem_fundo,(0,0))
+        
+        #ret.mover()
+        ret.cor(tela)
+        ret.recriar()
+        jogador.update(tela)
+        #jogador.mover(vx, vy)
+        
+        
+        
 
-            #if event.type == pygame.MOUSEMOTION:
-                #ret = ret.move(-10,-10)
+        pygame.display.update() #Atualizando enquanto a tela está aberta
 
-            if event.type == pygame.KEYDOWN:  #Se alguma tecla foi pressionada:
-                if event.key == pygame.K_LEFT: # Eixo x y
-                    ret.move_ip(-10,0)
-
-                if event.key == pygame.K_RIGHT:
-                    ret.move_ip(10,0)
-
-                if event.key == pygame.K_UP:
-                    ret.move_ip(0,-10)
-
-                if event.key == pygame.K_DOWN:
-                    ret.move_ip(0,10)
-
-                if event.key == pygame.K_SPACE:
-                    ret.move_ip(10,10)
-
-                if event.key == pygame.K_BACKSPACE:
-                    ret.move_ip(-10,-10)
-
-        #Timing para otimizar processamento e colocando cor branca como tela de fundo:
-        relogio.tick(27)
-        tela.fill(cor_branca)
-
-        #Passar a superficie e as posições no eixo x e y.
-        tela.blit(sup,[50,50])
-        tela.blit(sup2,[250,50])
-        tela.blit(sup2, [250, 150])
-
-        pygame.draw.rect(tela,cor_vermelha,ret)
-        pygame.display.update()
-
-    #Com a variável sair == True vai fechar o programa:
-    pygame.quit()
-
-
-
-
+    pygame.quit() #sair ==  True
 
 main()
