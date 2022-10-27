@@ -17,9 +17,9 @@ canvas.pack()
 background_photo = PhotoImage(file='imagens/fundo.png')
 background = canvas.create_image(0,0,image=background_photo,anchor=NW)
 
-tk.Button(window, text='Jogar',font=('Arial',14)).place(x=200, y=80)
-tk.Button(window, text='Instruções',font=('Arial',14)).place(x=200, y=130)
-tk.Button(window, text='Dificuldade',font=('Arial',14)).place(x=200, y=180)
+#tk.Button(window, text='Jogar',font=('Arial',14)).place(x=200, y=80)
+#tk.Button(window, text='Instruções',font=('Arial',14)).place(x=200, y=130)
+#tk.Button(window, text='Dificuldade',font=('Arial',14)).place(x=200, y=180)
 
 photo_image = PhotoImage(file='imagens/nave.png')
 my_image = canvas.create_image(0,0,image=photo_image,anchor=NW)
