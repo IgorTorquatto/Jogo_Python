@@ -79,7 +79,7 @@ def main():
     som_mov = pygame.mixer.Sound("audios/som2.wav")
 
     vx, vy = 0,0 #velocidade inicial
-    velocidade = 3 # o quanto que ele vai se deslocar quando pressionarmos o botão em pixel.
+    velocidade = 2 # o quanto que ele vai se deslocar quando pressionarmos o botão em pixel.
     leftpress, rightpress, uppress, downpress = False, False, False, False
 
     texto = pygame.font.SysFont("Arial", 15, True, False)
@@ -156,10 +156,10 @@ def main():
             jogador.mover(vx, vy)
 
             tela.blit(imagem_fundo,(0,0)) #O blit coloca na tela, passamos o objeto e a posição. (0,0) zero em x e em y centralizado.
-            segundos = pygame.time.get_ticks()/1000
-            segundos = str(segundos)
-            contador = texto.render("Pontuação:{}".format(segundos), 0, (255,140,0)) #Cor laranja em RGB
-            tela.blit(contador, (800, 10)) #320,10
+            #segundos = pygame.time.get_ticks()/1000
+            #segundos = str(segundos)
+           # contador = texto.render("Pontuação:{}".format(segundos), 0, (255,140,0)) #Cor laranja em RGB
+            #tela.blit(contador, (800, 10)) #320,10
                     
 
         relogio.tick(dificuldade)  #Atualização 20 frames por segundo. Velocidade do Game.
@@ -222,8 +222,11 @@ def menu():
 
     BG = pygame.image.load("imagens/fundo - Copia.png")
 
+    #Naves para animação do menu:
     img_photo = pygame.image.load("imagens/nave.png").convert_alpha()
-    nave=Player(img_photo)
+    nave = Player(img_photo)
+    nave2 = Player(img_photo)
+    nave3 = Player(img_photo)
 
 
     def get_font(size):  # Returns Press-Start-2P in the desired size
@@ -279,41 +282,33 @@ def menu():
             SCREEN.blit(BG, (0, 0))
             XVEL+=1
             YVEL+=1
+
             #
             #400,480 está a nave na tela
             # 29, 30 tamanho nave na hor e vert
 
 
 
-           # coordenadas = [400,480]
-
-            #if (coordenadas[0] <= WIDTH - 29 or coordenadas[0]<0 ):
-              #  xvel = -xvel
-
-
-           # if(coordenadas[1] <= HEIGHT - 30 or coordenadas[1] < 0):
-               # yvel = -yvel
-
-            #nave.mover(1,1)
-
-            #nave.update(SCREEN)
-            #time.sleep(0.01)
-
-           # coordenadas = [400,480]
-           # if (coordenadas[0] ==400 ):
-             #   XVEL= -XVEL
-            #if (coordenadas[1] ==480 ):
-               # YVEL= -YVEL
-
             #Lembrando : SCREEN: 1000 X 650 ; BACKGROUND: 1024 X 640 ; NAVE( Inicia em): 400 X 480
-            if XVEL == 20:
-                XVEL = -XVEL
-            if YVEL == 20:
-                YVEL = -YVEL
+            #Corrigindo bugs -> Temos que lembrar que o XVEL até 20 toca no canto da tela, porém temos que colocar 21 por conta da correção de índice
+            #na subida, ou seja , quando a variável recebe o negativo dela temos que somar 1 para que ele sempre volte de onde ele partiu e não fique voltando antes.
+            if YVEL == 21 and XVEL == 21:
+                XVEL = -XVEL +1
+                YVEL = -YVEL +1
+
+
+            #Naves Animadas:
             nave.mover(XVEL,YVEL)
-            time.sleep(0.5)
+            nave2.mover(0, YVEL)
+            nave3.mover(-XVEL,YVEL)
+
+            time.sleep(0.3)
             print(XVEL,YVEL)
+
+            #Mostrar as naves:
             nave.update(SCREEN)
+            nave2.update(SCREEN)
+            nave3.update(SCREEN)
 
 
             #
