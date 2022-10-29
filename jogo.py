@@ -1,3 +1,5 @@
+#Jogo sendo desenvolvido por Cícero Igor Alves Torquato dos Santos
+#Universidade Federal do Cariri
 import pygame,sys
 import random
 import time
@@ -227,6 +229,9 @@ def menu():
     nave = Player(img_photo)
     nave2 = Player(img_photo)
     nave3 = Player(img_photo)
+    nave4 = Player(img_photo)
+    nave5 = Player(img_photo)
+    nave6 = Player(img_photo)
 
 
     def get_font(size):  # Returns Press-Start-2P in the desired size
@@ -297,10 +302,14 @@ def menu():
                 YVEL = -YVEL +1
 
 
+
             #Naves Animadas:
             nave.mover(XVEL,YVEL)
             nave2.mover(0, YVEL)
             nave3.mover(-XVEL,YVEL)
+            nave4.mover(-XVEL,-YVEL)
+            nave5.mover(0,-YVEL)
+            nave6.mover(XVEL,-YVEL)
 
             time.sleep(0.3)
             print(XVEL,YVEL)
@@ -309,6 +318,9 @@ def menu():
             nave.update(SCREEN)
             nave2.update(SCREEN)
             nave3.update(SCREEN)
+            nave4.update(SCREEN)
+            nave5.update(SCREEN)
+            nave6.update(SCREEN)
 
 
             #
