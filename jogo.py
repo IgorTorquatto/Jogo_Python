@@ -277,6 +277,8 @@ def menu():
         while True:
 
             SCREEN.blit(BG, (0, 0))
+            XVEL+=1
+            YVEL+=1
             #
             #400,480 está a nave na tela
             # 29, 30 tamanho nave na hor e vert
@@ -297,15 +299,22 @@ def menu():
             #nave.update(SCREEN)
             #time.sleep(0.01)
 
-            coordenadas = [400,480]
-            if (coordenadas[0] <= WIDTH - 29 or coordenadas[0] < 0):
-                XVEL= -XVEL
-            if (coordenadas[1] <= HEIGHT - 30 or coordenadas[1] < 0):
-                YVEL= - YVEL
+           # coordenadas = [400,480]
+           # if (coordenadas[0] ==400 ):
+             #   XVEL= -XVEL
+            #if (coordenadas[1] ==480 ):
+               # YVEL= -YVEL
 
-            print(XVEL)
+            #Lembrando : SCREEN: 1000 X 650 ; BACKGROUND: 1024 X 640 ; NAVE( Inicia em): 400 X 480
+            if XVEL == 20:
+                XVEL = -XVEL
+            if YVEL == 20:
+                YVEL = -YVEL
             nave.mover(XVEL,YVEL)
+            time.sleep(0.5)
+            print(XVEL,YVEL)
             nave.update(SCREEN)
+
 
             #
 
