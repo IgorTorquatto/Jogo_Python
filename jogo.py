@@ -158,10 +158,7 @@ def main():
             jogador.mover(vx, vy)
 
             tela.blit(imagem_fundo,(0,0)) #O blit coloca na tela, passamos o objeto e a posição. (0,0) zero em x e em y centralizado.
-            #segundos = pygame.time.get_ticks()/1000
-            #segundos = str(segundos)
-           # contador = texto.render("Pontuação:{}".format(segundos), 0, (255,140,0)) #Cor laranja em RGB
-            #tela.blit(contador, (800, 10)) #320,10
+            
                     
 
         relogio.tick(dificuldade)  #Atualização 20 frames por segundo. Velocidade do Game.
@@ -217,7 +214,7 @@ def menu():
     pygame.init()
 
     WIDTH = 1000
-    HEIGHT = 650
+    HEIGHT = 630
     SCREEN = pygame.display.set_mode((WIDTH, HEIGHT)) #1000,650
     pygame.display.set_caption("Escape from Earth")
 
@@ -297,9 +294,9 @@ def menu():
             #Lembrando : SCREEN: 1000 X 650 ; BACKGROUND: 1024 X 640 ; NAVE( Inicia em): 400 X 480
             #Corrigindo bugs -> Temos que lembrar que o XVEL até 20 toca no canto da tela, porém temos que colocar 21 por conta da correção de índice
             #na subida, ou seja , quando a variável recebe o negativo dela temos que somar 1 para que ele sempre volte de onde ele partiu e não fique voltando antes.
-            if YVEL == 21 and XVEL == 21:
-                XVEL = -XVEL +1
-                YVEL = -YVEL +1
+            if YVEL == 20 and XVEL == 20:
+                XVEL = -XVEL -1
+                YVEL = -YVEL -1
 
 
 
@@ -312,7 +309,6 @@ def menu():
             nave6.mover(XVEL,-YVEL)
 
             time.sleep(0.3)
-            print(XVEL,YVEL)
 
             #Mostrar as naves:
             nave.update(SCREEN)
