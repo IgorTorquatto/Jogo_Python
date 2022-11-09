@@ -1,5 +1,3 @@
-#Jogo sendo desenvolvido por Cícero Igor Alves Torquato dos Santos
-#Universidade Federal do Cariri
 import pygame,sys
 import random
 import time
@@ -41,7 +39,7 @@ class Player(pygame.sprite.Sprite):
     def __init__(self, imagem): #Método construtor
         self.imagem = imagem #Vamos passar a imagem posteriormente
         self.rect = self.imagem.get_rect()  #Captura a area retangular para ser usada
-        self.rect.top, self.rect.left = (400, 480)  #posições do retângulo 100 do topo 200 a esquerda Centralizado
+        self.rect.top, self.rect.left = (315, 500)  #Antigo:400X480
 
     def mover(self, vx, vy):  #Objeto principal self + referências
         self.rect.move_ip(vx, vy) #Como a imagem está dentro do retângulo podemos mover apenas o retângulo com velocidades x e y.
@@ -158,7 +156,10 @@ def main():
             jogador.mover(vx, vy)
 
             tela.blit(imagem_fundo,(0,0)) #O blit coloca na tela, passamos o objeto e a posição. (0,0) zero em x e em y centralizado.
-            
+            #segundos = pygame.time.get_ticks()/1000
+            #segundos = str(segundos)
+           # contador = texto.render("Pontuação:{}".format(segundos), 0, (255,140,0)) #Cor laranja em RGB
+            #tela.blit(contador, (800, 10)) #320,10
                     
 
         relogio.tick(dificuldade)  #Atualização 20 frames por segundo. Velocidade do Game.
@@ -214,21 +215,15 @@ def menu():
     pygame.init()
 
     WIDTH = 1000
-    HEIGHT = 630
+    HEIGHT = 630  #650
     SCREEN = pygame.display.set_mode((WIDTH, HEIGHT)) #1000,650
     pygame.display.set_caption("Escape from Earth")
 
 
     BG = pygame.image.load("imagens/fundo - Copia.png")
 
-    #Naves para animação do menu:
+    #Imagem da nave para animação no menu:
     img_photo = pygame.image.load("imagens/nave.png").convert_alpha()
-    nave = Player(img_photo)
-    nave2 = Player(img_photo)
-    nave3 = Player(img_photo)
-    nave4 = Player(img_photo)
-    nave5 = Player(img_photo)
-    nave6 = Player(img_photo)
 
 
     def get_font(size):  # Returns Press-Start-2P in the desired size
@@ -276,27 +271,36 @@ def menu():
             pygame.display.update()
 
     def main_menu():
-        XVEL=1
-        YVEL=1
 
+        XVEL=0
+        YVEL=0
+
+        # Naves para animação do menu:
+
+        nave = Player(img_photo)
+        nave2 = Player(img_photo)
+        nave3 = Player(img_photo)
+        nave4 = Player(img_photo)
+        nave5 = Player(img_photo)
+        nave6 = Player(img_photo)
+
+        #coordenadas = [500,315]
         while True:
 
             SCREEN.blit(BG, (0, 0))
             XVEL+=1
             YVEL+=1
 
-            #
-            #400,480 está a nave na tela
             # 29, 30 tamanho nave na hor e vert
 
 
 
-            #Lembrando : SCREEN: 1000 X 650 ; BACKGROUND: 1024 X 640 ; NAVE( Inicia em): 400 X 480
+            #Lembrando : SCREEN: 1000 X 650 ; BACKGROUND: 1024 X 640 ; NAVE( Inicia em): 500 X 315
             #Corrigindo bugs -> Temos que lembrar que o XVEL até 20 toca no canto da tela, porém temos que colocar 21 por conta da correção de índice
             #na subida, ou seja , quando a variável recebe o negativo dela temos que somar 1 para que ele sempre volte de onde ele partiu e não fique voltando antes.
-            if YVEL == 20 and XVEL == 20:
-                XVEL = -XVEL -1
-                YVEL = -YVEL -1
+            if YVEL == 23 and XVEL == 23:
+                XVEL = -XVEL +1
+                YVEL = -YVEL +1
 
 
 
@@ -308,7 +312,8 @@ def menu():
             nave5.mover(0,-YVEL)
             nave6.mover(XVEL,-YVEL)
 
-            time.sleep(0.3)
+            time.sleep(0.2)
+            print(XVEL,YVEL)
 
             #Mostrar as naves:
             nave.update(SCREEN)
