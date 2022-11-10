@@ -72,11 +72,11 @@ def main():
     imagem_fundo = pygame.image.load("imagens/fundo - Copia.png").convert_alpha()
     imagem_explosao = pygame.image.load("imagens/explosao.png").convert_alpha()
 
-    pygame.mixer.music.load("audios/musica.mp3")
+    pygame.mixer.music.load("audios/musica.ogg")
     pygame.mixer.music.play(3)
 
-    som_explosao = pygame.mixer.Sound("audios/explosao2.wav")
-    som_mov = pygame.mixer.Sound("audios/som2.wav")
+    som_explosao = pygame.mixer.Sound("audios/explosao2.ogg")
+    som_mov = pygame.mixer.Sound("audios/som2.ogg")
 
     vx, vy = 0,0 #velocidade inicial
     velocidade = 2 # o quanto que ele vai se deslocar quando pressionarmos o botão em pixel.
@@ -298,7 +298,7 @@ def menu():
             #Lembrando : SCREEN: 1000 X 650 ; BACKGROUND: 1024 X 640 ; NAVE( Inicia em): 500 X 315
             #Corrigindo bugs -> Temos que lembrar que o XVEL até 20 toca no canto da tela, porém temos que colocar 21 por conta da correção de índice
             #na subida, ou seja , quando a variável recebe o negativo dela temos que somar 1 para que ele sempre volte de onde ele partiu e não fique voltando antes.
-            if YVEL == 23 and XVEL == 23:
+            if YVEL == 20 and XVEL == 20:
                 XVEL = -XVEL +1
                 YVEL = -YVEL +1
 
@@ -313,7 +313,7 @@ def menu():
             nave6.mover(XVEL,-YVEL)
 
             time.sleep(0.2)
-            print(XVEL,YVEL)
+            #print(XVEL,YVEL)
 
             #Mostrar as naves:
             nave.update(SCREEN)
@@ -363,5 +363,5 @@ def menu():
     main_menu()
 
 if __name__ == "__main__":
-   menu()
+    menu()
 
