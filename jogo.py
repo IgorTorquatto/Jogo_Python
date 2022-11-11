@@ -2,182 +2,7 @@ import pygame,sys
 import random
 import time
 
-
-class Recs(object):
-    def __init__(self, numeroinicial):
-        self.lista = []  #Guarda os retângulos criados.
-        for x in range(numeroinicial):  #Percorre até o numeroincial que é a quantidade de retângulos que queremos criar.
-            leftrandom = random.randrange(2, 1100) # Passa um pouco da tela para testes. #(2,560)
-            toprandom = random.randrange(-1124, -10) #(-580,-10)
-            width = random.randrange(10, 30) #Largura #(10,30)
-            height = random.randrange(15, 30) #(15,30)
-            self.lista.append(pygame.Rect(leftrandom, toprandom, width, height)) #Colocando rects na lista com as variáveis definidas.
-
-
-    def mover(self):
-        for retangulo in self.lista: #Lista pertence a classe então devemos acessá-lo por self.lista
-            retangulo.move_ip(0, 2)
-                            
-
-    def cor(self, superficie):
-        for retangulo in self.lista:
-            pygame.draw.rect(superficie, (165,214,254),retangulo) #Desenhando retãngulo na cor azul.
-
-    def recriar(self):
-        for x in range(len(self.lista)):
-            if self.lista[x].top > 481: #Se a lista na posição do retângulo ( Parte superior) passar da tela recria.
-
-                leftrandom = random.randrange(2, 1100) #(2,560)
-                toprandom = random.randrange(-1124, -10) #(-580,-10)
-                width = random.randrange(10, 30)
-                height = random.randrange(15, 30)
-                self.lista[x] = (pygame.Rect(leftrandom, toprandom, width, height))  #Recria assim que um retângulo passa da tela, se fosse o append ia ficar criando retângulos sempre.
-        
-#Estruturado:
-class Player(pygame.sprite.Sprite):
-    #1-Preparar um objeto (imagem) inserir numa area retangular e posicionar na tela.
-    def __init__(self, imagem): #Método construtor
-        self.imagem = imagem #Vamos passar a imagem posteriormente
-        self.rect = self.imagem.get_rect()  #Captura a area retangular para ser usada
-        self.rect.top, self.rect.left = (315, 500)  #Antigo:400X480
-
-    def mover(self, vx, vy):  #Objeto principal self + referências
-        self.rect.move_ip(vx, vy) #Como a imagem está dentro do retângulo podemos mover apenas o retângulo com velocidades x e y.
-    #3- Atualizar um objeto (superficie)
-    def update(self, superficie):
-        superficie.blit(self.imagem, self.rect)
-
-
-def colisao(player, recs):
-    for rec in recs.lista:
-        if player.rect.colliderect(rec): #Testa colisão.
-            return True
-    return False
-
-
-def main():
-    import pygame
-    #main usa a classe player por isso não pode estar dentro dessa classe.
-    #Declaração das váriaveis (objetos)
-    pygame.init()
-    tela = pygame.display.set_mode((1024, 500))  #480,300
-    pygame.display.set_caption(("Escape from Earth"))
-    sair = False
-    relogio = pygame.time.Clock() #Velocidade da tela , em quantos quadros ela é renderizada.
-    dificuldade = 50
-
-    img_nave = pygame.image.load("imagens/nave.png").convert_alpha() #Imagem deve ser png, sem fundo branco, para não bugar colisão. Converte para ter uma certa transparência suave de fundo.
-    jogador = Player(img_nave) #Classe Player criada , dar referência que a imagem da nave será o jogador em si . Quando criar a area retangular vai colocar nela a imagem e essa imagem é o player.
-
-    imagem_fundo = pygame.image.load("imagens/fundo - Copia.png").convert_alpha()
-    imagem_explosao = pygame.image.load("imagens/explosao.png").convert_alpha()
-
-    pygame.mixer.music.load("audios/musica.ogg")
-    pygame.mixer.music.play(3)
-
-    som_explosao = pygame.mixer.Sound("audios/explosao2.ogg")
-    som_mov = pygame.mixer.Sound("audios/som2.ogg")
-
-    vx, vy = 0,0 #velocidade inicial
-    velocidade = 2 # o quanto que ele vai se deslocar quando pressionarmos o botão em pixel.
-    leftpress, rightpress, uppress, downpress = False, False, False, False
-
-    texto = pygame.font.SysFont("Arial", 15, True, False)
-
-    ret = Recs(30) #passando o numeroincial de 30 para criar os retângulos
-    colidiu = False
-
-    while sair != True:
-        
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:  #Evento de tela : Se o usuário clicar no X ele quita do game.
-                sair = True
-
-            if colidiu == False:
-
-                if event.type == pygame.KEYDOWN:  #Evento de teclado: Se a tecla for pressionada.
-
-                    if event.key == pygame.K_LSHIFT:
-                        #if velocidade > 1:
-                          #  velocidade -= 0.5
-                        #print(velocidade)
-                        dificuldade+=10
-
-                    if event.key == pygame.K_LEFT:
-                        leftpress = True
-                        vx = - velocidade  #-10 eixo x
-
-                    if event.key == pygame.K_RIGHT:
-                        rightpress = True
-                        vx = velocidade  #10 eixo x
-
-                    if event.key == pygame.K_UP:
-                        uppress = True
-                        vy = - velocidade  # -10 no eixo y (sendo que para subir é negativo mesmo).
-                        som_mov.play()   #A função play roda o som.
-
-                    if event.key == pygame.K_DOWN:
-                        downpress = True
-                        vy = velocidade  # 10 eixo y
-
-                if event.type == pygame.KEYUP: #Evento de Teclado: Verifica se você soltou a tecla.
-                    if event.key == pygame.K_LEFT:
-                        leftpress = False
-                        if rightpress:vx = velocidade #para corrigir troca de sentidos, melhora movimentação e velocidade da movimentação.
-                        else:vx = 0
-
-                    if event.key == pygame.K_RIGHT:
-                        rightpress = False
-                        if leftpress:vx = -velocidade
-                        else:vx = 0
-
-                    if event.key == pygame.K_UP:
-                        uppress = False
-                        if downpress:vx = velocidade
-                        vy = 0
-
-                    if event.key == pygame.K_DOWN:
-                        downpress = False
-                        if uppress:vx = -velocidade
-                        vy = 0
-
-
-        if colisao(jogador, ret):
-            
-            colidiu = True
-            jogador.imagem = imagem_explosao
-            pygame.mixer.music.stop()
-            som_explosao.play()
-            
-         
-
-        if colidiu == False:
-            ret.mover()
-            jogador.mover(vx, vy)
-
-            tela.blit(imagem_fundo,(0,0)) #O blit coloca na tela, passamos o objeto e a posição. (0,0) zero em x e em y centralizado.
-            #segundos = pygame.time.get_ticks()/1000
-            #segundos = str(segundos)
-           # contador = texto.render("Pontuação:{}".format(segundos), 0, (255,140,0)) #Cor laranja em RGB
-            #tela.blit(contador, (800, 10)) #320,10
-                    
-
-        relogio.tick(dificuldade)  #Atualização 20 frames por segundo. Velocidade do Game.
-        #tela.blit(imagem_fundo,(0,0))
-        
-        #ret.mover()
-        ret.cor(tela) #Desenha o retângulo
-        ret.recriar()
-        jogador.update(tela)
-        #jogador.mover(vx, vy)
-        
-        
-        
-
-        pygame.display.update() #Atualizando enquanto a tela está aberta
-
-    pygame.quit() #sair ==  True
-
+#Menu:
 def menu():
 
     class Button():
@@ -215,18 +40,18 @@ def menu():
     pygame.init()
 
     WIDTH = 1000
-    HEIGHT = 630  #650
-    SCREEN = pygame.display.set_mode((WIDTH, HEIGHT)) #1000,650
+    HEIGHT = 630
+    SCREEN = pygame.display.set_mode((WIDTH, HEIGHT))
     pygame.display.set_caption("Escape from Earth")
 
 
     BG = pygame.image.load("imagens/fundo - Copia.png")
 
-    #Imagem da nave para animação no menu:
+
     img_photo = pygame.image.load("imagens/nave.png").convert_alpha()
 
 
-    def get_font(size):  # Returns Press-Start-2P in the desired size
+    def get_font(size):
         return pygame.font.Font("assets/font.ttf", size)
 
     def play():
@@ -275,7 +100,6 @@ def menu():
         XVEL=0
         YVEL=0
 
-        # Naves para animação do menu:
 
         nave = Player(img_photo)
         nave2 = Player(img_photo)
@@ -284,24 +108,17 @@ def menu():
         nave5 = Player(img_photo)
         nave6 = Player(img_photo)
 
-        #coordenadas = [500,315]
+
         while True:
 
             SCREEN.blit(BG, (0, 0))
             XVEL+=1
             YVEL+=1
 
-            # 29, 30 tamanho nave na hor e vert
 
-
-
-            #Lembrando : SCREEN: 1000 X 650 ; BACKGROUND: 1024 X 640 ; NAVE( Inicia em): 500 X 315
-            #Corrigindo bugs -> Temos que lembrar que o XVEL até 20 toca no canto da tela, porém temos que colocar 21 por conta da correção de índice
-            #na subida, ou seja , quando a variável recebe o negativo dela temos que somar 1 para que ele sempre volte de onde ele partiu e não fique voltando antes.
             if YVEL == 20 and XVEL == 20:
                 XVEL = -XVEL +1
                 YVEL = -YVEL +1
-
 
 
             #Naves Animadas:
@@ -312,8 +129,7 @@ def menu():
             nave5.mover(0,-YVEL)
             nave6.mover(XVEL,-YVEL)
 
-            time.sleep(0.2)
-            #print(XVEL,YVEL)
+            time.sleep(0.25)
 
             #Mostrar as naves:
             nave.update(SCREEN)
@@ -323,8 +139,6 @@ def menu():
             nave5.update(SCREEN)
             nave6.update(SCREEN)
 
-
-            #
 
             MENU_MOUSE_POS = pygame.mouse.get_pos()
 
@@ -358,10 +172,177 @@ def menu():
                         pygame.quit()
                         sys.exit()
 
+
             pygame.display.update()
+
 
     main_menu()
 
+
+#Jogo:
+class Recs(object):
+    def __init__(self, numeroinicial):
+        self.lista = []
+        for x in range(numeroinicial):
+            leftrandom = random.randrange(2, 1100)
+            toprandom = random.randrange(-1124, -10)
+            width = random.randrange(10, 30)
+            height = random.randrange(15, 30)
+            self.lista.append(pygame.Rect(leftrandom, toprandom, width, height))
+
+
+    def mover(self):
+        for retangulo in self.lista:
+            retangulo.move_ip(0, 2)
+                            
+
+    def cor(self, superficie):
+        for retangulo in self.lista:
+            pygame.draw.rect(superficie, (165,214,254),retangulo)
+
+    def recriar(self):
+        for x in range(len(self.lista)):
+            if self.lista[x].top > 481:
+
+                leftrandom = random.randrange(2, 1100)
+                toprandom = random.randrange(-1124, -10)
+                width = random.randrange(10, 30)
+                height = random.randrange(15, 30)
+                self.lista[x] = (pygame.Rect(leftrandom, toprandom, width, height))
+        
+#Estruturado:
+class Player(pygame.sprite.Sprite):
+
+    def __init__(self, imagem):
+        self.imagem = imagem
+        self.rect = self.imagem.get_rect()
+        self.rect.top, self.rect.left = (315, 500)
+
+    def mover(self, vx, vy):
+        self.rect.move_ip(vx, vy)
+
+    def update(self, superficie):
+        superficie.blit(self.imagem, self.rect)
+
+
+def colisao(player, recs):
+    for rec in recs.lista:
+        if player.rect.colliderect(rec):
+            return True
+    return False
+
+
+def main():
+    import pygame
+
+    pygame.init()
+    tela = pygame.display.set_mode((1024, 500))
+    pygame.display.set_caption(("Escape from Earth"))
+    sair = False
+    relogio = pygame.time.Clock()
+    dificuldade = 50
+
+    img_nave = pygame.image.load("imagens/nave.png").convert_alpha()
+    jogador = Player(img_nave)
+
+    imagem_fundo = pygame.image.load("imagens/fundo - Copia.png").convert_alpha()
+    imagem_explosao = pygame.image.load("imagens/explosao.png").convert_alpha()
+
+    pygame.mixer.music.load("audios/musica.ogg")
+    pygame.mixer.music.play(3)
+
+    som_explosao = pygame.mixer.Sound("audios/explosao2.ogg")
+    som_mov = pygame.mixer.Sound("audios/som2.ogg")
+
+    vx, vy = 0,0
+    velocidade = 2
+    leftpress, rightpress, uppress, downpress = False, False, False, False
+
+    #texto = pygame.font.SysFont("Arial", 15, True, False)
+
+    ret = Recs(30)
+    colidiu = False
+
+    while sair != True:
+        
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                sair = True
+
+            if colidiu == False:
+
+                if event.type == pygame.KEYDOWN:
+
+                    if event.key == pygame.K_LSHIFT:
+                        dificuldade+=10
+
+                    if event.key == pygame.K_LEFT:
+                        leftpress = True
+                        vx = - velocidade
+
+                    if event.key == pygame.K_RIGHT:
+                        rightpress = True
+                        vx = velocidade
+
+                    if event.key == pygame.K_UP:
+                        uppress = True
+                        vy = - velocidade
+                        som_mov.play()
+
+                    if event.key == pygame.K_DOWN:
+                        downpress = True
+                        vy = velocidade
+
+                if event.type == pygame.KEYUP:
+                    if event.key == pygame.K_LEFT:
+                        leftpress = False
+                        if rightpress:vx = velocidade
+                        else:vx = 0
+
+                    if event.key == pygame.K_RIGHT:
+                        rightpress = False
+                        if leftpress:vx = -velocidade
+                        else:vx = 0
+
+                    if event.key == pygame.K_UP:
+                        uppress = False
+                        if downpress:vx = velocidade
+                        vy = 0
+
+                    if event.key == pygame.K_DOWN:
+                        downpress = False
+                        if uppress:vx = -velocidade
+                        vy = 0
+
+
+        if colisao(jogador, ret):
+            
+            colidiu = True
+            jogador.imagem = imagem_explosao
+            pygame.mixer.music.stop()
+            som_explosao.play()
+            
+         
+
+        if colidiu == False:
+            ret.mover()
+            jogador.mover(vx, vy)
+
+            tela.blit(imagem_fundo,(0,0))
+            #segundos = (pygame.time.get_ticks()/1000 ) - int(tempo)
+            #segundos = str(segundos)
+            #contador = texto.render("Pontuação:{}".format(segundos), 0, (255,140,0)) #Cor laranja em RGB
+            #tela.blit(contador, (800, 10)) #320,10
+
+        relogio.tick(dificuldade)
+
+        ret.cor(tela)
+        ret.recriar()
+        jogador.update(tela)
+        pygame.display.update()
+
+    pygame.quit()
+
+
 if __name__ == "__main__":
     menu()
-
