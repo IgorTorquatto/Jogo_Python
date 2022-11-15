@@ -235,6 +235,8 @@ def colisao(player, recs):
 def main():
     import pygame
 
+    tempo_menu = pygame.time.get_ticks()
+
     pygame.init()
     tela = pygame.display.set_mode((1024, 500))
     pygame.display.set_caption(("Escape from Earth"))
@@ -258,7 +260,7 @@ def main():
     velocidade = 2
     leftpress, rightpress, uppress, downpress = False, False, False, False
 
-    #texto = pygame.font.SysFont("Arial", 15, True, False)
+    texto = pygame.font.SysFont("Arial", 15, True, False)
 
     ret = Recs(30)
     colidiu = False
@@ -329,10 +331,11 @@ def main():
             jogador.mover(vx, vy)
 
             tela.blit(imagem_fundo,(0,0))
-            #segundos = (pygame.time.get_ticks()/1000 ) - int(tempo)
-            #segundos = str(segundos)
-            #contador = texto.render("Pontuação:{}".format(segundos), 0, (255,140,0)) #Cor laranja em RGB
-            #tela.blit(contador, (800, 10)) #320,10
+            segundos = (pygame.time.get_ticks()/1000 ) - tempo_menu/1000
+            segundos = round(segundos,2)
+            segundos = str(segundos)
+            contador = texto.render("Pontuação:{}".format(segundos), 0, (255,140,0)) #Cor laranja em RGB
+            tela.blit(contador, (800, 10)) #320,10
 
         relogio.tick(dificuldade)
 
