@@ -96,7 +96,7 @@ def menu():
             pygame.display.update()
 
     def main_menu():
-
+        
         XVEL=0
         YVEL=0
 
@@ -251,7 +251,7 @@ def main():
     imagem_explosao = pygame.image.load("imagens/explosao.png").convert_alpha()
 
     pygame.mixer.music.load("audios/musica.ogg")
-    pygame.mixer.music.play(3)
+    pygame.mixer.music.play(10)
 
     som_explosao = pygame.mixer.Sound("audios/explosao2.ogg")
     som_mov = pygame.mixer.Sound("audios/som2.ogg")
@@ -335,7 +335,7 @@ def main():
             segundos = round(segundos,3)
             segundos = str(segundos)
             contador = texto.render("Pontuação:{}".format(segundos), 0, (255,140,0)) #Cor laranja em RGB
-            tela.blit(contador, (800, 10)) #320,10
+            tela.blit(contador, (800, 10)) 
 
         relogio.tick(dificuldade)
 
