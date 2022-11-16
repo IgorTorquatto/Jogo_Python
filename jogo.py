@@ -332,7 +332,7 @@ def main():
 
             tela.blit(imagem_fundo,(0,0))
             segundos = (pygame.time.get_ticks()/1000 ) - tempo_menu/1000
-            segundos = round(segundos,2)
+            segundos = round(segundos,3)
             segundos = str(segundos)
             contador = texto.render("Pontuação:{}".format(segundos), 0, (255,140,0)) #Cor laranja em RGB
             tela.blit(contador, (800, 10)) #320,10
