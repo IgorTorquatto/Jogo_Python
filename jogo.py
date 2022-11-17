@@ -50,6 +50,8 @@ def menu():
 
     img_photo = pygame.image.load("imagens/nave.png").convert_alpha()
 
+    pygame.mixer.music.load("audios/Star Wars The Force Awakens _Force Theme_ [8 Bit Version North Pole Twin].ogg")
+    pygame.mixer.music.play(50)
 
     def get_font(size):
         return pygame.font.Font("assets/font.ttf", size)
@@ -75,7 +77,7 @@ def menu():
             OPTIONS_RECT3 = OPTIONS_MANUAL2.get_rect(center=(500, 80))
             SCREEN.blit(OPTIONS_MANUAL2, OPTIONS_RECT3)
 
-            OPTIONS_MANUAL3 = get_font(10).render("Para mudar a dificuldade do jogo use a tecla Shift da esquerda.", True, "Black")
+            OPTIONS_MANUAL3 = get_font(10).render("Para mudar a dificuldade do jogo use a tecla \"a\".", True, "Black")
             OPTIONS_RECT3 = OPTIONS_MANUAL3.get_rect(center=(500, 100))
             SCREEN.blit(OPTIONS_MANUAL3, OPTIONS_RECT3)
 
@@ -275,7 +277,7 @@ def main():
 
                 if event.type == pygame.KEYDOWN:
 
-                    if event.key == pygame.K_LSHIFT:
+                    if event.key == pygame.K_a:
                         dificuldade+=10
 
                     if event.key == pygame.K_LEFT:
