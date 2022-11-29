@@ -6,6 +6,7 @@ import time
 import MOD_1
 import MOD_2
 import MOD_3
+import Testes
 
 #Constantes Numéricas:
 TELA_MENU_LARGURA = 1000
