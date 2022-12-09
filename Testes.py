@@ -15,8 +15,8 @@ def test_musica():
     assert jogo.MUSICA_JOGO == "audios/musica.ogg"
 
 def test_button():
-    assert MOD_1.Button != False
+    assert MOD_1.Button != None
 
 def test_recs():
     assert MOD_2.WIDTH != 0
-    assert MOD_2.WIDTH != 0
+    assert MOD_2.HEIGHT != 0

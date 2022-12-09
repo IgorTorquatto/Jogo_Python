@@ -2,15 +2,15 @@
 import random
 import pygame
 
+WIDTH= random.randrange(10, 30)
+HEIGHT= random.randrange(15, 30)
 class Recs(object):
     def __init__(self, numeroinicial):
         self.lista = []
         for x in range(numeroinicial):
             leftrandom = random.randrange(2, 1100)
             toprandom = random.randrange(-1124, -10)
-            width = random.randrange(10, 30)
-            height = random.randrange(15, 30)
-            self.lista.append(pygame.Rect(leftrandom, toprandom, width, height))
+            self.lista.append(pygame.Rect(leftrandom, toprandom, WIDTH, HEIGHT))
 
     def mover(self):
         for retangulo in self.lista:
